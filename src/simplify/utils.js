@@ -20,3 +20,12 @@ export var utils = {
         }
     }
 }
+export function isNumber(number) {
+    return typeof number === 'number'
+}
+export function isString(string) {
+    return typeof string === 'string'
+}
+export function isBoolean(boolean) {
+    return typeof boolean === 'boolean'
+}

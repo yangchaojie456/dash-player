@@ -1,5 +1,4 @@
 import { utils } from './utils'
-import { globalVariable } from './global'
 export function initProperty(player, videoEle) {
     [
         'autoplay',
@@ -66,7 +65,7 @@ export function initProperty(player, videoEle) {
     })
     Object.defineProperty(player, 'pictureinpicture', {
         get() {
-            return globalVariable.pictureinpicture
+            return player.globalVariable.pictureinpicture
         },
         set() {
             throw `pictureinpicture is readOnly`
@@ -74,7 +73,7 @@ export function initProperty(player, videoEle) {
     })
     Object.defineProperty(player, 'hasMini', {
         get() {
-            return globalVariable.hasMini
+            return player.globalVariable.hasMini
         },
         set() {
             throw `hasMini is readOnly`

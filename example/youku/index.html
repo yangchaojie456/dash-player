@@ -174,8 +174,8 @@
                             <div id="control-settings" class="control-icon control-quality-icon control-settings-icon">
                                 <span class="icon iconfont icon-setting"></span>
                                 <div class="quality-dashboard settings-dashboard">
-                                    <div data-val="loop" class="settings-item js-loop">
-                                        关于我们
+                                    <div data-val="loop" id="control-loop" class="settings-item js-loop">
+                                        循环播放
                                         <span class="icon iconfont switch-close"></span>
                                         <span class="icon iconfont switch-open"></span>
                                     </div>
@@ -195,7 +195,7 @@
                                 <span id="picture-in-picture" class="icon iconfont icon-picture"
                                     data-eventlog="xenpip"></span>
                             </div>
-                            <div id="control-screen" data-tip="网页全屏" class="control-icon  control-webfullscreen-icon">
+                            <div id="control-screen" data-tip="页中屏" class="control-icon  control-webfullscreen-icon">
                                 <span id="open-webfullscreen" class="icon iconfont icon-webfullscreen"
                                     data-eventlog="xenwfs"></span>
                                 <span id="close-webfullscreen" class="icon iconfont icon-exit-webfullscreen"
@@ -234,7 +234,8 @@
                 rootEle: '#CJ-player-0',
                 videoEle: '#CJ-video',
                 autoplay: true,
-                controls: false
+                controls: false,
+                loop: true
             })
             window.player = player
             player.once('canPlay', function () {
@@ -258,6 +259,10 @@
                     controlElement.dataset.tip = "暂停"
                     player.pause()
                 }
+                // 播放结束时 切换到暂停按钮
+                player.listener('playbackEnded', function () {
+                    toPause()
+                })
                 startBtn && (startBtn.onclick = function (e) {
                     toPlay()
                 })
@@ -295,7 +300,7 @@
 
                 // --------------已加载进度 start------------
                 var cancelEvent_2 = player.listener("fragmentLoadingCompleted", function (event) {
-                    loadingDuration = event.request.duration ? event.request.duration + event.request.startTime : 0
+                    loadingDuration = event.request.startTime
                     rootElement.querySelector('#progress-loaded').style.width = loadingDuration / duration * 100 + "%"
                 });
                 // --------------已加载进度 end------------
@@ -338,9 +343,15 @@
                 rootElement.querySelector('#control-quality').onmouseleave = function () {
                     this.classList.remove('dashboard-show')
                 }
-                // player.setTrackSwitchModeFor('video', 'alwaysReplace')
-
-
+                // 监听画质切换
+                player.listener('qualityChangeRendered', function (e) {
+                    // console.log(e)
+                    // player.getQuality() // 根据画质自己命名
+                    var obj = ['流畅', '高清', '超清']
+                    if (e.mediaType == "video") {
+                        console.log('画质已经智能切换到:' + obj[e.newQuality])
+                    }
+                })
                 var qualitySettingsItemElement = rootElement.querySelectorAll('#control-quality .settings-item')
                 for (var index = 0, len = qualitySettingsItemElement.length; index < len; index++) {
                     qualitySettingsItemElement[index].onclick = function () {
@@ -356,7 +367,7 @@
 
                             player.setQuality('video', Number(this.dataset.val), function () {
                                 console.log('画质切换完成')
-                            }, 'youku')
+                            }, 'immediately')
                         }
                         rootElement.querySelector('#control-quality .control-quality-btn').innerHTML = this.dataset.label
                     }
@@ -426,6 +437,16 @@
                 rootElement.querySelector('#control-settings').onmouseleave = function () {
                     this.classList.remove('dashboard-show')
                 }
+                // 设置 循环播放
+                if (player.loop) {
+                    rootElement.querySelector('#control-loop').classList.add('active')
+                }
+                rootElement.querySelector('#control-loop').onclick = function () {
+                    this.classList.toggle('active')
+                    // console.log(this.classList)
+                    player.setLoop(this.classList.contains('active'))
+                }
+
                 // --------------设置中心 end------------
 
 
@@ -453,13 +474,13 @@
 
                 // --------------小屏播放 start------------
                 rootElement.querySelector('#open-webfullscreen').onclick = function () {
-                    player.switchMiniMode({ width: 300 }, { bottom: 280, right: 40 })
+                    player.switchMiniMode({ width: 600 }, { bottom: '0px', right: "20%" })
 
                     rootElement.querySelector('#control-screen').classList.remove('control-webfullscreen-icon')
                     rootElement.querySelector('#control-screen').classList.add('exit-webfullscreen-icon')
                 }
                 rootElement.querySelector('#close-webfullscreen').onclick = function () {
-                    player.switchMiniMode({ width: 300 }, { bottom: 280, right: 40 })
+                    player.switchMiniMode()
 
                     rootElement.querySelector('#control-screen').classList.add('control-webfullscreen-icon')
                     rootElement.querySelector('#control-screen').classList.remove('exit-webfullscreen-icon')
@@ -472,14 +493,14 @@
                     rootElement.querySelector('#close-fullscreen').style.display = 'inline-block'
                     rootElement.querySelector('#open-fullscreen').style.display = 'none'
                     player.switchFullScreen()
-                    rootElement.querySelector('#CJ-video').classList.toggle('CJ-player-position')
+
 
                 }
                 rootElement.querySelector('#close-fullscreen').onclick = function () {
                     rootElement.querySelector('#open-fullscreen').style.display = 'inline-block'
                     rootElement.querySelector('#close-fullscreen').style.display = 'none'
                     document.exitFullscreen()
-                    rootElement.querySelector('#CJ-video').classList.toggle('CJ-player-position')
+
                 }
 
                 // --------------全屏模式 end--------------
