@@ -156,7 +156,7 @@ export function initMethods(player) {
          */
         autoQuality() {
             player.updateSettings(playerSettings);
-            console.log('update')
+            // console.log(playerSettings)
         },
         /**
          * Switch to picture-in-picture mode

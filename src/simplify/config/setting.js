@@ -5,7 +5,7 @@ export var playerSettings = {
         liveDelayFragmentCount: NaN,
         liveDelay: null,
         scheduleWhilePaused: true,
-        fastSwitchEnabled: true,
+        fastSwitchEnabled: false,
         bufferPruningInterval: 10,
         bufferToKeep: 20,
         bufferAheadToKeep: 80,
@@ -49,6 +49,8 @@ export var playerSettings = {
             lowLatencyMultiplyFactor: 5
         },
         abr: {
+            movingAverageMethod: 'slidingWindow',
+            ABRStrategy: 'abrDynamic',
             bandwidthSafetyFactor: 0.9,
             useDefaultABRRules: true,
             useBufferOccupancyABR: false,

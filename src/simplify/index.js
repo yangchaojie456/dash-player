@@ -82,15 +82,11 @@ function initPlayer(player) {
         streaming: {
             scheduleWhilePaused: true,
             fastSwitchEnabled: true,
-            bufferPruningInterval: 1,
-            bufferToKeep: 5,
-            bufferAheadToKeep: 80,
             stableBufferTime: 1,
-            // bufferTimeAtTopQuality: 1,
-            // bufferTimeAtTopQualityLongForm: 5,
-            wallclockTimeUpdateInterval: 2000,
             abr: {
-                useDefaultABRRules: false, // Select image quality based on network
+                useDefaultABRRules: true,
+                autoSwitchBitrate: { audio: true, video: false }
+                // Select image quality based on network                                
             }
         }
     })

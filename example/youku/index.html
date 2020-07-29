@@ -5,29 +5,14 @@
     <meta charset="utf-8">
     <title>youku Sample</title>
     <meta name="description" content="">
-    <script class="code" src="../../dist/main.js"></script>
+    <script class="code" src="../../dist/index.js"></script>
     <link rel="stylesheet" href="./dash-video.css">
-    <style>
-        body {}
-
-        .videoContainer {
-            position: relative;
-        }
-
-        .dash-video-player {
-            position: relative;
-            /* This position relative is needed to position the menus */
-            /* width: 640px; */
-            margin: 0 auto;
-        }
-    </style>
 
 </head>
 
 <body onload="startVideo()">
 
     <div class="dash-video-player ">
-
         <div id="CJ-player-0" class="CJ-player">
             <div class="CJ-film-player">
                 <video id="CJ-video" preload="auto" style="width: 100%; background-color: rgb(0, 0, 0);"></video>
@@ -350,6 +335,8 @@
                     var obj = ['流畅', '高清', '超清']
                     if (e.mediaType == "video") {
                         console.log('画质已经智能切换到:' + obj[e.newQuality])
+
+                        rootElement.querySelector('.current-level').innerHTML = '(' + obj[e.newQuality] + ')'
                     }
                 })
                 var qualitySettingsItemElement = rootElement.querySelectorAll('#control-quality .settings-item')
