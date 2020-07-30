@@ -71,9 +71,17 @@ export function initProperty(player, videoEle) {
             throw `pictureinpicture is readOnly`
         }
     })
-    Object.defineProperty(player, 'hasMini', {
+    Object.defineProperty(player, 'Mini', {
         get() {
             return player.globalVariable.hasMini
+        },
+        set() {
+            throw `hasMini is readOnly`
+        }
+    })
+    Object.defineProperty(player, 'fullScreen', {
+        get() {
+            return player.globalVariable.fullScreen
         },
         set() {
             throw `hasMini is readOnly`

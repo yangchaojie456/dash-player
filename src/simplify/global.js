@@ -6,6 +6,7 @@ export function initGlobal(player) {
             qualityAfterStartTime: null,
             pictureinpicture: false,
             hasMini: false,
+            fullScreen: false,
             qualityChangeFinish: null,
             loopListener: null
         }

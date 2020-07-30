@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>youku Sample</title>
     <meta name="description" content="">
-    <script class="code" src="../../dist/index.js"></script>
+    <script class="code" src="../../dist/player.js"></script>
     <link rel="stylesheet" href="./dash-video.css">
 
 </head>
@@ -236,13 +236,17 @@
                     controlElement.classList.add('control-pause-icon')
                     controlElement.classList.remove('control-play-icon')
                     controlElement.dataset.tip = "播放"
-                    player.play()
+                    player.play(function () {
+                        console.log('播放')
+                    })
                 }
                 function toPause() {
                     controlElement.classList.add('control-play-icon')
                     controlElement.classList.remove('control-pause-icon')
                     controlElement.dataset.tip = "暂停"
-                    player.pause()
+                    player.pause(function () {
+                        console.log('暂停')
+                    })
                 }
                 // 播放结束时 切换到暂停按钮
                 player.listener('playbackEnded', function () {

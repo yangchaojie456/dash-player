@@ -3,13 +3,18 @@ import { isNumber, isString, isBoolean } from './utils'
 export function initMethods(player) {
     var globalVariable = player.globalVariable
     Object.assign(player, {
-        // use methods from player.__proto__
-        play: player.play,
-        pause: player.pause,
-        setPlaybackRate: player.setPlaybackRate,
-        setVolume: player.setVolume,
-        setMute: player.setMute,
-
+        play: function (callback) {
+            player.once('playbackPlaying', function () {
+                typeof callback == 'function' && callback()
+            })
+            Object.getPrototypeOf(player).play()
+        },
+        pause: function (callback) {
+            player.once('playbackPaused', function () {
+                typeof callback == 'function' && callback()
+            })
+            Object.getPrototypeOf(player).pause()
+        },
         // encapsulation methods
         /**
          * fast forward time
@@ -61,6 +66,9 @@ export function initMethods(player) {
             }
             player.once('playbackPlaying', fn)
         },
+        setPlaybackRate: player.setPlaybackRate,
+        setVolume: player.setVolume,
+        setMute: player.setMute,
         /**
          * get MediaType quality
          * 获取各种媒体品质
@@ -156,7 +164,6 @@ export function initMethods(player) {
          */
         autoQuality() {
             player.updateSettings(playerSettings);
-            // console.log(playerSettings)
         },
         /**
          * Switch to picture-in-picture mode
@@ -320,10 +327,10 @@ export function initMethods(player) {
             if ('exitFullscreen' in document) {
                 if (document.fullscreen) {
                     document.exitFullscreen()
-                    return false
+                    return globalVariable.fullScreen = false
                 } else {
                     player.rootEle.requestFullscreen()
-                    return true
+                    return globalVariable.fullScreen = true
                 }
             } else {
                 tip = tip || 'The current browser does not support full screen. Please try using another browser'
@@ -352,6 +359,10 @@ export function initMethods(player) {
                 player.videoEle.loop = true
             }
         },
+        getAutoPlay() {
+            return player.autoplay
+        },
+
         // Complete later
 
         // setInfo() { },// 设置信息
