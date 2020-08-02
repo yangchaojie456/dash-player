@@ -1,5 +1,6 @@
-import { utils } from './utils'
-export function initProperty(player, videoEle) {
+var { utils } = require('./utils')
+
+module.exports = function initProperty(player, videoEle) {
     [
         'autoplay',
         'controls',

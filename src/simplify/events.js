@@ -1,4 +1,4 @@
-export function initEvents(player) {
+module.exports = function initEvents(player) {
     Object.assign(player, {
         /**
          * Listens for an event and returns a function to cancel the listening

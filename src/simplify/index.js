@@ -1,11 +1,16 @@
 // import dash_debug from '../core/dash/dash.all.debug.js'
-import dash_min from '../core/dash/dash.all.min.js'
-import { initProperty } from './property'
-import { initMethods } from './methods'
-import { initEvents } from './events'
-import { initGlobal } from './global'
 
-export function MediaPlayer(options) {
+var dash_min = require('../core/dash/dash.all.min.js')
+// import { initProperty } from './property'
+var initProperty = require('./property')
+// import { initMethods } from './methods'
+var initMethods = require('./methods')
+// import { initEvents } from './events'
+var initEvents = require('./events')
+// import { initGlobal } from './global'
+var initGlobal = require('./global')
+
+module.exports = function MediaPlayer(options) {
     return init(options)
 }
 function init(options) {

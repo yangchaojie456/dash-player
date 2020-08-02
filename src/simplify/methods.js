@@ -1,6 +1,7 @@
-import { playerSettings } from './config/setting'
-import { isNumber, isString, isBoolean } from './utils'
-export function initMethods(player) {
+var { playerSettings } = require('./config/setting')
+
+var { isNumber, isString, isBoolean } = require('./utils')
+module.exports = function initMethods(player) {
     var globalVariable = player.globalVariable
     Object.assign(player, {
         play: function (callback) {

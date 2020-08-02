@@ -1,4 +1,4 @@
-export function initGlobal(player) {
+module.exports = function initGlobal(player) {
     Object.assign(player, {
         globalVariable: {
             qualityDep: {},
