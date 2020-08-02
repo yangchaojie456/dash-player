@@ -25,7 +25,7 @@ Using npm:
 Using cdn:
 
 ```html
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://unpkg.com/dash-player/dist/player.js"></script>
 ```
 
 
