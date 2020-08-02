@@ -1,6 +1,6 @@
 {
   "name": "dash-player",
-  "version": "1.0.0",
+  "version": "v0.2.3",
   "description": "player for dash",
   "main": "dist/player",
   "scripts": {
@@ -12,8 +12,20 @@
     "video",
     "player"
   ],
-  "author": "yangchaojie",
-  "license": "ISC",
+  "author": {
+    "name": "yangchaojie",
+    "email": "yangchaojie456@126.com",
+    "url": "https://github.com/yangchaojie456"
+  },
+  "license": "BSD",
+  "homepage": "https://github.com/yangchaojie456/dash-player",
+  "bugs": {
+    "url": "https://github.com/yangchaojie456/dash-player/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yangchaojie456/dash-player.git"
+  },
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/plugin-transform-runtime": "^7.10.5",
