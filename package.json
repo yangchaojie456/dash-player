@@ -1,6 +1,6 @@
 {
   "name": "dash-player",
-  "version": "v0.2.4",
+  "version": "0.2.5",
   "description": "player for dash",
   "main": "dist/player",
   "scripts": {
