@@ -460,6 +460,8 @@ export function initMethods(player) {
         // setInfo() { },// 设置信息
         // setCaption() { },// 选择字幕
         // setLanguage() { },// 选择语言
-        resetVideo(src) { },  // 更换视频，可以用于 播放下一步 视频
+        resetVideo(src) {
+
+        },  // 更换视频，可以用于 播放下一步 视频
     })
 }
