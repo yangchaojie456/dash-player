@@ -13,9 +13,19 @@ export function initEvents(player) {
             var fn = function () {
                 callback && callback.apply(this, arguments)
             }
-            player.on(event, fn);
-            return function cancelListener() {
-                player.off(event, fn);
+            // Extended time interval
+            if (event == 'playbackTimeUpdated') {
+                var timer = setInterval(() => {
+                    fn()
+                }, 500)
+                return function cancelListener() {
+                    clearInterval(timer)
+                }
+            } else {
+                player.on(event, fn);
+                return function cancelListener() {
+                    player.off(event, fn);
+                }
             }
         },
         /**

@@ -69,12 +69,66 @@ export function initMethods(player) {
         setPlaybackRate: player.setPlaybackRate,
         setVolume: player.setVolume,
         setMute: player.setMute,
+
+        /**
+         * get MediaType bitrate
+         * 获取各种媒体品质
+         * @param {*} type 	MediaType : "video" | "audio" 
+         */
+        getQuality(type) {
+            if (!type) {
+                throw new TypeError('getQuality(type) : type is necessary')
+            } else if (type && (type == "video" || type == "audio")) {
+                var qualityIndex = player.getQualityFor(type)
+                return player.getBitrateInfoListFor(type).find(res => res.qualityIndex == qualityIndex)
+            } else {
+                throw new RangeError('param:type choose from "video" | "audio"')
+            }
+        },
+        /**
+         * get max bitrate
+         * @param {*} type 
+         */
+        getMaxQuality(type) {
+            if (!type) {
+                throw new TypeError('getMaxQuality(type) : type is necessary')
+            } else if (type && (type == "video" || type == "audio")) {
+                return player.getTopBitrateInfoFor(type)
+            } else {
+                throw new RangeError('param:type choose from "video" | "audio"')
+            }
+        },
+        /**
+         * set max bitrate
+         * @param {*} type MediaType : "video" | "audio" 
+         * @param {*} bitrate Kbit
+         */
+        setMaxQuality(type, bitrate) {
+            if (!type) {
+                throw new TypeError('getMaxQuality(type) : type is necessary')
+            } else if (type && (type == "video" || type == "audio")) {
+                player.updateSettings({
+                    streaming: {
+                        abr: {
+                            useDefaultABRRules: true,
+                            maxBitrate: { audio: -1, video: bitrate }
+                        }
+                    }
+                })
+                if (player.getQuality('video').bitrate / 1000 > bitrate) {
+                    var quality = player.getQualityList(type).sort((a, b) => b.bitrate - a.bitrate).find(res => res.bitrate <= bitrate * 1000)
+                    player.setQuality(type, quality.qualityIndex)
+                }
+            } else {
+                throw new RangeError('param:type choose from "video" | "audio"')
+            }
+        },
         /**
          * get MediaType quality
          * 获取各种媒体品质
          * @param {*} type 	MediaType : "video" | "audio" | "text" | "fragmentedText" | "embeddedText" | "image"
          */
-        getQuality(type) {
+        getQualityList(type) {
             if (!type) {
                 var map = {};
                 ["video", "audio", "text", "fragmentedText", "embeddedText", "image"].forEach(res => {
@@ -90,19 +144,29 @@ export function initMethods(player) {
         /**
          * set MediaType quality
          * @param {*} type 	MediaType : "video" | "audio" | "text" | "fragmentedText" | "embeddedText" | "image" 
-         * @param {*} qualityIndex  get from getQuality()
+         * @param {*} qualityIndex  get from getQualityList / getQuality
          * @param {*} callback after finish 
          * @param {*} mode immediately/delay  Switch now or wait until the loaded video has been played
          * 立即切换 还是等到已加载视频 播放完成后切换
          */
         setQuality(type, qualityIndex, callback, mode = 'immediately') {
-            if (type && (type == "video" || type == "audio" || type == "text" || type == "fragmentedText" || type == "embeddedText" || type == "image")) {
+            if (qualityIndex > 100) {
+                throw new TypeError('setQuality(type, qualityIndex,callback?,mode?), qualityIndex:Number from  getQualityList(type?)')
+            }
+            if (type && (type == "video" || type == "audio")) {
                 if (isNaN(qualityIndex)) {
-                    throw new TypeError('setQuality(type, qualityIndex,callback?,mode?), qualityIndex:Number from  getQuality(type?)')
-                } else if (!player.getQuality(type).map(res => res.qualityIndex).includes(qualityIndex)) {
-                    throw new TypeError('setQuality(type, qualityIndex,callback?,mode?), qualityIndex:Number from  getQuality(type?)')
+                    throw new TypeError('setQuality(type, qualityIndex,callback?,mode?), qualityIndex:Number from  getQualityList(type?)')
+                } else if (!player.getQualityList(type).map(res => res.qualityIndex).includes(qualityIndex)) {
+                    throw new TypeError('setQuality(type, qualityIndex,callback?,mode?), qualityIndex:Number from  getQualityList(type?)')
                 }
-
+                player.updateSettings({
+                    streaming: {
+                        abr: {
+                            useDefaultABRRules: true,
+                            autoSwitchBitrate: { audio: true, video: false }
+                        }
+                    }
+                })
                 globalVariable.qualityDep[type] = qualityIndex
 
                 // execute quality queue
@@ -156,14 +220,42 @@ export function initMethods(player) {
                 }, 100);
 
             } else {
-                throw new RangeError('param:type choose from "video" | "audio" | "text" | "fragmentedText" | "embeddedText" | "image" | falsity ')
+                throw new RangeError('param:type choose from "video" | "audio"')
             }
         },
         /**
          * Intelligent selection of image quality
          */
-        autoQuality() {
-            player.updateSettings(playerSettings);
+        setAutoQuality() {
+            var pauseStatus = player.paused
+            player.pause()
+            if (!globalVariable.qualityAfterStartTime) {
+                globalVariable.qualityAfterStartTime = player.currentTime;
+            }
+            if (globalVariable.qualityAfterStartTime - 15 < 0) {
+                player.seek(player.duration - 1)
+            } else if (globalVariable.qualityAfterStartTime + 15 > player.duration) {
+                player.seek(globalVariable.qualityAfterStartTime - 15)
+            } else {
+                player.seek(globalVariable.qualityAfterStartTime - 15)
+            }
+            player.once('playbackSeeking', function (e) {
+
+                if (globalVariable.qualityAfterStartTime) {
+                    player.seek(globalVariable.qualityAfterStartTime)
+                    globalVariable.qualityAfterStartTime = null
+                    player.play()
+                    pauseStatus && player.pause()
+                }
+            })
+            player.updateSettings({
+                streaming: {
+                    abr: {
+                        useDefaultABRRules: true,
+                        autoSwitchBitrate: { audio: true, video: true }
+                    }
+                }
+            })
         },
         /**
          * Switch to picture-in-picture mode

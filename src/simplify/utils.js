@@ -4,8 +4,8 @@ export var utils = {
         var innerHour = duration < 3600
         if (innerMinute) {
             return {
-                current: current,
-                duration: duration
+                current: String(parseInt(current)).padStart(2, 0),
+                duration: String(parseInt(duration)).padStart(2, 0)
             }
         } else if (innerHour) {
             return {

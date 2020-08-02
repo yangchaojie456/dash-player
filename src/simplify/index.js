@@ -13,10 +13,34 @@ function init(options) {
         dashjs.MediaPlayer().create()
     )
 
-    var { rootEle, videoEle, autoplay, controls, loop, startTime, playbackRate, volume, src, }
+    var {
+        rootEle,
+        videoEle,
+        autoplay,
+        controls,
+        loop,
+        startTime,
+        playbackRate,
+        volume,
+        src,
+        maxBitrate,
+        initialBitrate,
+        autoQuality,
+    }
         = options
         = Object.assign({
-            rootEle: '', videoEle: '', autoplay: true, controls: false, loop: false, startTime: null, playbackRate: 1.0, volume: 0.5, src: '',
+            rootEle: '',
+            videoEle: '',
+            autoplay: true,
+            controls: false,
+            loop: false,
+            startTime: null,
+            playbackRate: 1.0,
+            volume: 0.5,
+            src: '',
+            maxBitrate: -1,
+            initialBitrate: -1,
+            autoQuality: true,
         }, options)
 
     if (typeof videoEle === 'string') {
@@ -35,18 +59,35 @@ function init(options) {
         throw new Error('rootEle will be  id / class,or video element')
         return false
     }
-
     player.initialize(videoEle, src, false);
 
     player.videoEle = videoEle;
     player.rootEle = rootEle;
 
+    delete options.maxBitrate
+    delete options.initialBitrate
+    delete options.autoQuality
     initVideo(videoEle, options)
     initGlobal(player)
     initProperty(player, videoEle)
     initEvents(player)
     initMethods(player)
     initPlayer(player)
+
+    player.updateSettings({
+        streaming: {
+            scheduleWhilePaused: true,
+            fastSwitchEnabled: true,
+            stableBufferTime: 1,
+            abr: {
+                useDefaultABRRules: true,
+                maxBitrate: { audio: -1, video: maxBitrate },
+                initialBitrate: { audio: -1, video: initialBitrate },
+                // Select image quality based on network                  
+                autoSwitchBitrate: { audio: true, video: autoQuality }
+            }
+        }
+    })
     return player
 }
 
@@ -57,12 +98,12 @@ function initVideo(videoEle, options) {
 function initPlayer(player) {
 
     player.once('canPlay', function () {
+
         player.autoplay ? player.play() : player.pause()
         player.setPlaybackRate(player.playbackRate)
         player.setVolume(player.volume)
         player.loop && player.setLoop(true)
     })
-
 
     var cancel = player.listener('playbackNotAllowed', function () {
         setTimeout(() => {
@@ -78,16 +119,4 @@ function initPlayer(player) {
         cancel()
     })
 
-    player.updateSettings({
-        streaming: {
-            scheduleWhilePaused: true,
-            fastSwitchEnabled: true,
-            stableBufferTime: 1,
-            abr: {
-                useDefaultABRRules: true,
-                autoSwitchBitrate: { audio: true, video: false }
-                // Select image quality based on network                                
-            }
-        }
-    })
 }

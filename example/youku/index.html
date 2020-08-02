@@ -124,11 +124,14 @@
                                 <span class="control-quality-btn js-quality-text" data-eventlog="xCq">智能</span>
                                 <span class="control-quality-note" style="display: none;">播放速度不满意？试试这里</span>
                                 <div class="quality-dashboard quality-dashboard-new largest" data-spm="qingxidu">
-                                    <div data-val="2" data-label="超清" class="settings-item quality-item">超清
+                                    <div data-val="2" data-bit="3000" data-label="超清"
+                                        class="settings-item quality-item">超清
                                         1280P</div>
-                                    <div data-val="1" data-label="高清" class="settings-item quality-item">高清
+                                    <div data-val="1" data-bit="2000" data-label="高清"
+                                        class="settings-item quality-item">高清
                                         720P</div>
-                                    <div data-val="0" data-label="流畅" class="settings-item quality-item">流畅
+                                    <div data-val="0" data-bit="700" data-label="流畅" class="settings-item quality-item">
+                                        流畅
                                         480P</div>
                                     <div data-val="-1" data-label="智能" class="settings-item quality-item qauto active"
                                         data-eventlog="xsq">智能<span class="current-level">(高清)</span></div>
@@ -215,14 +218,18 @@
         function startVideo() {
 
             var player = new MediaPlayer({
-                src: "http://127.0.0.1:8080/mpd/index.mpd",
+                src: "http://127.0.0.1:8080/mpd2/index.mpd",
                 rootEle: '#CJ-player-0',
                 videoEle: '#CJ-video',
                 autoplay: true,
                 controls: false,
-                loop: true
+                loop: true,
+                maxBitrate: 2000, // Kbps
+                initialBitrate: 2000,
+                autoQuality: true,
             })
             window.player = player
+
             player.once('canPlay', function () {
                 // 等视频加载完成后 ，不如有些属性获取不到 例如 ： 视频长度
                 var rootElement = player.rootEle
@@ -275,6 +282,8 @@
 
                 rootElement.querySelector('.control-time').style.display = 'inline-block'
                 var duration = player.duration
+
+
                 var cancelEvent_1 = player.listener("playbackTimeUpdated", function () {
 
                     rootElement.querySelector('#current-time').innerHTML = player.formatTime.current
@@ -285,6 +294,7 @@
                     rootElement.querySelector('#progress-played').style.width = currentTime / duration * 100 + "%";
                     rootElement.querySelector('#thumb-play') && (rootElement.querySelector('#thumb-play').style.left = currentTime / duration * 100 + "%")
                 })
+                // cancelEvent_1()
                 // --------------计算时间进度 end------------
 
                 // --------------已加载进度 start------------
@@ -334,31 +344,76 @@
                 }
                 // 监听画质切换
                 player.listener('qualityChangeRendered', function (e) {
-                    // console.log(e)
-                    // player.getQuality() // 根据画质自己命名
+                    // player.getQualityList() // 根据画质自己命名
                     var obj = ['流畅', '高清', '超清']
                     if (e.mediaType == "video") {
                         console.log('画质已经智能切换到:' + obj[e.newQuality])
 
                         rootElement.querySelector('.current-level').innerHTML = '(' + obj[e.newQuality] + ')'
-                    }
-                })
-                var qualitySettingsItemElement = rootElement.querySelectorAll('#control-quality .settings-item')
-                for (var index = 0, len = qualitySettingsItemElement.length; index < len; index++) {
-                    qualitySettingsItemElement[index].onclick = function () {
-                        var sibling = this.parentElement.children
+
+
+
+                        var sibling = rootElement.querySelector('.quality-dashboard.quality-dashboard-new ').children
                         for (var i = 0, l = sibling.length; i < l; i++) {
                             sibling[i].classList.remove('active')
                         }
-                        this.classList.add('active')
+                        var currentEle = rootElement.querySelector('.quality-dashboard.quality-dashboard-new div[data-val="' + e.newQuality + '"]')
+                        currentEle.classList.add('active')
+
+                    }
+                })
+
+
+                var qualitySettingsItemElement = rootElement.querySelectorAll('#control-quality .settings-item')
+                for (var index = 0, len = qualitySettingsItemElement.length; index < len; index++) {
+                    qualitySettingsItemElement[index].onclick = function () {
+
                         // 智能选择画质
                         if (this.dataset.val == -1) {
-                            player.autoQuality()
-                        } else {
+                            player.setAutoQuality()
 
-                            player.setQuality('video', Number(this.dataset.val), function () {
-                                console.log('画质切换完成')
-                            }, 'immediately')
+                            var sibling = this.parentElement.children
+                            for (var i = 0, l = sibling.length; i < l; i++) {
+                                sibling[i].classList.remove('active')
+                            }
+                            this.classList.add('active')
+                        } else {
+                            // 因为设置了最大bit 所以 选择画质时可以有限制
+                            if (this.dataset.bit > player.getMaxQuality('video').bitrate / 1000) {
+                                var result = confirm('你还没有超清画质的权限，是否现在获取')
+                                if (result) {
+                                    player.updateSettings({
+                                        streaming: {
+                                            abr: {
+                                                useDefaultABRRules: true,
+                                                maxBitrate: { audio: -1, video: -1 },
+                                                initialBitrate: { audio: -1, video: -1 },
+                                                // Select image quality based on network                  
+                                                autoSwitchBitrate: { audio: true, video: false }
+                                            }
+                                        }
+                                    })
+                                    player.setQuality('video', Number(this.dataset.val), function () {
+                                        console.log('画质切换完成')
+                                    }, 'immediately')
+
+                                    var sibling = this.parentElement.children
+                                    for (var i = 0, l = sibling.length; i < l; i++) {
+                                        sibling[i].classList.remove('active')
+                                    }
+                                    this.classList.add('active')
+                                }
+                            } else {
+                                var sibling = this.parentElement.children
+                                for (var i = 0, l = sibling.length; i < l; i++) {
+                                    sibling[i].classList.remove('active')
+                                }
+                                this.classList.add('active')
+                                player.setQuality('video', Number(this.dataset.val), function () {
+                                    console.log('画质切换完成')
+                                }, 'immediately')
+                            }
+
                         }
                         rootElement.querySelector('#control-quality .control-quality-btn').innerHTML = this.dataset.label
                     }

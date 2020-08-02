@@ -12,7 +12,7 @@ export function initProperty(player, videoEle) {
         'volume',
         'muted',
         'error',
-        'src'
+        'src',
     ].forEach(property => {
         Object.defineProperty(player, property, {
             get() {
