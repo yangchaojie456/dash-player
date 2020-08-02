@@ -192,11 +192,40 @@ player.setMute(Boolean:value)
 ### getQuality
 ```js
 /**
- * get MediaType quality
+ * get current MediaType quality
  * 获取各种媒体品质
  * @param {*} type 	MediaType : "video" | "audio" | "text" | "fragmentedText" | "embeddedText" | "image"
  */
 player.getQuality([String:type])
+```
+
+### getMaxQuality
+```js
+/**
+ * get max bitrate
+ * @param {*} type 
+ */
+player.getMaxQuality([String:type])
+```
+
+### setMaxQuality
+```js
+/**
+ * set max bitrate
+ * @param {*} type MediaType : "video" | "audio" 
+ * @param {*} bitrate Kbit
+ */
+player.setMaxQuality([String:type],Number:bitrate)
+```
+
+### getQualityList
+```js
+/**
+ * get list for MediaType quality
+ * 获取各种媒体品质
+ * @param {*} type 	MediaType : "video" | "audio" | "text" | "fragmentedText" | "embeddedText" | "image"
+ */
+player.getQualityList([String:type])
 ```
 
 ### setQuality
@@ -212,12 +241,13 @@ player.getQuality([String:type])
 player.setQuality(String:type, Boolean:qualityIndex, Function:callback, String:mode = 'immediately')
 ```
 
-### autoQuality
+### setAutoQuality
 ```js
 /**
  * Intelligent selection of image quality
+ * 自动选择画质
  */
-player.autoQuality()
+player.setAutoQuality()
 ```
 
 ### setLoop
