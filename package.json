@@ -1,6 +1,6 @@
 {
   "name": "dash-player",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "player for dash",
   "main": "src/index.js",
   "scripts": {
