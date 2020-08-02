@@ -1,5 +1,5 @@
 # dash-player
-[![npm version](https://img.shields.io/badge/npm-v0.2.3-orange)](https://www.npmjs.com/package/dash-player)
+[![npm version](https://img.shields.io/badge/npm-v0.2.4-orange)](https://www.npmjs.com/package/dash-player)
 
 # Introduction
 This project is based on dash.js and implements a concise API for the H5 player.
