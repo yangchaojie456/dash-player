@@ -71,8 +71,8 @@ export function initMethods(player) {
         setMute: player.setMute,
 
         /**
-         * get MediaType bitrate
-         * 获取各种媒体品质
+         * get current MediaType quality
+         * 获取当前某媒体品质
          * @param {*} type 	MediaType : "video" | "audio" 
          */
         getQuality(type) {
@@ -124,7 +124,7 @@ export function initMethods(player) {
             }
         },
         /**
-         * get MediaType quality
+         * get list for MediaType quality
          * 获取各种媒体品质
          * @param {*} type 	MediaType : "video" | "audio" | "text" | "fragmentedText" | "embeddedText" | "image"
          */
