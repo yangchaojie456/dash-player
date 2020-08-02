@@ -124,15 +124,15 @@
                                 <span class="control-quality-btn js-quality-text" data-eventlog="xCq">智能</span>
                                 <span class="control-quality-note" style="display: none;">播放速度不满意？试试这里</span>
                                 <div class="quality-dashboard quality-dashboard-new largest" data-spm="qingxidu">
-                                    <div data-val="2" data-bit="3000" data-label="超清"
+                                    <div data-val="2" data-bit="2000" data-label="超清"
                                         class="settings-item quality-item">超清
-                                        1280P</div>
-                                    <div data-val="1" data-bit="2000" data-label="高清"
-                                        class="settings-item quality-item">高清
                                         720P</div>
-                                    <div data-val="0" data-bit="700" data-label="流畅" class="settings-item quality-item">
-                                        流畅
+                                    <div data-val="1" data-bit="700" data-label="高清" class="settings-item quality-item">
+                                        高清
                                         480P</div>
+                                    <div data-val="0" data-bit="400" data-label="流畅" class="settings-item quality-item">
+                                        流畅
+                                        240P</div>
                                     <div data-val="-1" data-label="智能" class="settings-item quality-item qauto active"
                                         data-eventlog="xsq">智能<span class="current-level">(高清)</span></div>
                                 </div>
@@ -218,14 +218,14 @@
         function startVideo() {
 
             var player = new MediaPlayer({
-                src: "http://127.0.0.1:8080/mpd2/index.mpd",
+                src: "http://127.0.0.1:8080/mpd3/index.mpd",
                 rootEle: '#CJ-player-0',
                 videoEle: '#CJ-video',
                 autoplay: true,
                 controls: false,
                 loop: true,
-                maxBitrate: 2000, // Kbps
-                initialBitrate: 2000,
+                maxBitrate: 700, // Kbps
+                initialBitrate: 700,
                 autoQuality: true,
             })
             window.player = player
