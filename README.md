@@ -51,7 +51,7 @@ Usage
 * `Now comes the good stuff. We need to create a MediaPlayer`
 ```javascript
 var player = new MediaPlayer({
-    src: "http://127.0.0.1:8080/mpd/index.mpd",
+    src: "http://yangchaojie.top/allow_origin/mpd/index.mpd",
     rootEle: '#CJ-player-container',
     videoEle: '#CJ-video',
     autoplay: true,
