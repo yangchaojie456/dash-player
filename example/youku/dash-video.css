@@ -1088,18 +1088,18 @@
 }
 
 .preloading-layer {
-    position        : absolute;
-    top             : 0;
-    bottom          : 0;
-    left            : 0;
-    right           : 0;
-    background-color: #000;
-    text-align      : center;
-    align-items     : center;
-    justify-content : center;
-    display         : flex;
-    z-index         : 81;
-    pointer-events  : none;
+    position           : absolute;
+    top                : 0;
+    bottom             : 0;
+    left               : 0;
+    right              : 0;
+    /* background-color: #000; */
+    text-align         : center;
+    align-items        : center;
+    justify-content    : center;
+    display            : flex;
+    z-index            : 81;
+    pointer-events     : none;
 }
 
 .preloading-layer.blackbg {

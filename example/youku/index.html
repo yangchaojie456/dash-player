@@ -7,7 +7,12 @@
     <meta name="description" content="">
     <script class="code" src="../../dist/player.js"></script>
     <link rel="stylesheet" href="./dash-video.css">
-
+    <style>
+        body {
+            max-width: 1200px;
+            margin: 50px auto;
+        }
+    </style>
 </head>
 
 <body onload="startVideo()">
@@ -210,6 +215,17 @@
                     <div class="yk-info-menuitem" data-val="menu-showdetail" style="display:none">详细统计信息</div> -->
                     <div class="yk-info-menuitem yk-version-info" data-val="menu-version">版本号: 0.1.0</div>
                 </div>
+                <div id="loading" class="preloading-layer" style="display: none;">
+                    <div class="preloading-container" style="width:148px; margin-left: -74px;height: 90px;">
+                        <div class="h5-layer-loading">
+                            <div class="spinner1">
+                                <div class="bounce1"></div>
+                                <div class="bounce2"></div>
+                                <div class="bounce3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -231,6 +247,16 @@
             window.player = player
 
             player.once('canPlay', function () {
+
+                // loading 
+                player.listener('playbackWaiting', function () {
+                    document.getElementById('loading').style.display = 'block'
+                    console.log('等待数据加载')
+                    player.once('playbackPlaying', function () {
+                        document.getElementById('loading').style.display = 'none'
+                        console.log('数据加载完成')
+                    })
+                })
                 // 等视频加载完成后 ，不如有些属性获取不到 例如 ： 视频长度
                 var rootElement = player.rootEle
                 // --------------开始/暂停 start------------

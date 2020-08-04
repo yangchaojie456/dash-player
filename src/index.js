@@ -1,7 +1,7 @@
 
 var MediaPlayer = require('./simplify/index.js')
 
-MediaPlayer.version = '0.2.8';
+MediaPlayer.version = '0.2.9';
 
 typeof window !== 'undefined' && (window.MediaPlayer = MediaPlayer);
 if (typeof module === "object" && typeof module.exports === "object") {
