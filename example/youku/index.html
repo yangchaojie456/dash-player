@@ -217,11 +217,12 @@
                 var duration = player.duration
                 // --------------计算时间进度------------
                 // --------------play progress------------
-                var cancelEvent_1 = player.listener("playbackTimeUpdated", function () {
+                var cancelEvent_1 = player.listener("timeUpdated", function () {
                     rootElement.querySelector('#current-time').innerHTML = player.formatTime.current
                     rootElement.querySelector('#duration-time').innerHTML = player.formatTime.duration
                     var currentTime = player.currentTime
                     // 
+                    console.log('timeUpdated')
                     rootElement.querySelector('#progress-played').style.width = currentTime / duration * 100 + "%";
                     rootElement.querySelector('#thumb-play') && (rootElement.querySelector('#thumb-play').style.left = currentTime / duration * 100 + "%")
                 })

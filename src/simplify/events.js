@@ -14,8 +14,9 @@ module.exports = function initEvents(player) {
                 callback && callback.apply(this, arguments)
             }
             // Extended time interval
-            if (event == 'playbackTimeUpdated') {
+            if (event == 'timeUpdated') {
                 var timer = setInterval(() => {
+                    if (player.paused || player.ended) return
                     fn()
                 }, 500)
                 return function cancelListener() {
