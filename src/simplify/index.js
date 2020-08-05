@@ -1,13 +1,7 @@
-// import dash_debug from '../core/dash/dash.all.debug.js'
-
 var dash_min = require('../core/dash/dash.all.min.js')
-// import { initProperty } from './property'
 var initProperty = require('./property')
-// import { initMethods } from './methods'
 var initMethods = require('./methods')
-// import { initEvents } from './events'
 var initEvents = require('./events')
-// import { initGlobal } from './global'
 var initGlobal = require('./global')
 
 module.exports = function MediaPlayer(options) {
@@ -72,6 +66,7 @@ function init(options) {
     delete options.maxBitrate
     delete options.initialBitrate
     delete options.autoQuality
+
     initVideo(videoEle, options)
     initGlobal(player)
     initProperty(player, videoEle)

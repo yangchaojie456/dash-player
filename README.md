@@ -11,6 +11,15 @@ When using dash.js, the API is too complex and cumbersome, and some common funct
 
 在使用dash.js 时，api 过于复杂繁琐，有些播放器常用功能，在dash.js上并没有体现。例如就不存在立即切换分辨率的API ，为了更简单创建一个功能完善，使用简单的H5播放器库。dash-player对dash 进行了一些简化。想要实现更复杂功能可以自行参考dash.js
 
+# DEMO
+[http://yangchaojie.top/plugin/dash-player](http://yangchaojie.top/plugin/dash-player)
+    
+# Download Sample
+
+    
+[---------↓↓↓ download ↓↓↓-----------](http://yangchaojie.top/assets/myPlugin/dash-player/dash-player.zip)
+    
+
 Install
 =======
 
@@ -38,7 +47,7 @@ Usage
 ```html
 <body>
   ...
-  <script src="yourPathToDash/player.js"></script>
+  <script src="https://unpkg.com/dash-player/dist/player.js"></script>
 </body>
 ```
 * Create a video element somewhere in your html. 
@@ -54,8 +63,7 @@ var player = new MediaPlayer({
     src: "http://yangchaojie.top/allow_origin/mpd/index.mpd",
     rootEle: '#CJ-player-container',
     videoEle: '#CJ-video',
-    autoplay: true,
-    controls: false,
+    autoplay: true,    
     loop: true
 })
 ```
@@ -75,18 +83,27 @@ var player = new MediaPlayer({
         <div id="CJ-player-container">
           <video id="CJ-video" preload="auto"><video>
         </div>
-        <script src="yourPathToDash/player.js"></script>
+        <script src="https://unpkg.com/dash-player/dist/player.js"></script>
         <script>
             var player = new MediaPlayer({
-                src: "http://127.0.0.1:8080/mpd/index.mpd",
+                src: "http://yangchaojie.top/allow_origin/mpd/index.mpd",
                 rootEle: '#CJ-player-container',
                 videoEle: '#CJ-video',
-                autoplay: true,
-                controls: false,
+                autoplay: true,                
                 loop: true
             })
             player.once('canPlay', function () {
-              console.log('ready')
+                console.log('ready')
+                // *.addEventListener('click',function(){
+                //     player.play()
+                //     player.pause()
+                //     // to 60s
+                //     player.setSeek(60)
+                //     // choose quality 
+                //     player.setQuality('video', **, function () {
+                //          console.log('画质切换完成')
+                //     }, 'immediately')
+                // })
             })
         </script>
     </body>
@@ -101,7 +118,7 @@ Propertys
 -------
 
 * **autoplay** <_read only_> Boolean
-* **controls** <_read only_> String
+* **controls** <_read only_> Boolean is show controls of videoEle
 * **paused** <_read only_> Boolean
 * **loop** <_read only_> Boolean
 * **ended** <_read only_> Boolean
