@@ -104,6 +104,11 @@ var player = new MediaPlayer({
                 //          console.log('画质切换完成')
                 //     }, 'immediately')
                 // })
+                // var cancelEvent_1 = player.listener("timeUpdated", function () {
+                //     console.log('timeUpdated')
+                //     player.formatTime.current
+                //     player.formatTime.duration                    
+                // })
             })
         </script>
     </body>
